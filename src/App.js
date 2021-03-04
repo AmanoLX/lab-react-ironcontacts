@@ -4,49 +4,82 @@ import contacts from './contacts.json';
 
 class App extends Component {
 	state = {
-		firstContacts: contacts.slice(0, 5),
+		contacts: contacts.slice(0, 5),
 	};
 
 	// Iteration 2: Add New Random Contacts
+	// addRandomContact = () => {
+	// 	// copy and expand contacts array into new copyContacts array
+	// 	const copyContacts = [...this.state.contacts];
+	// 	// get random contact
+	// 	const getRandomContact =
+	// 		contacts[Math.floor(Math.random() * contacts.length)];
+	// 	// check if random contact isn't already in array
+	// 	if (!copyContacts.includes(getRandomContact)) {
+	// 		// if not, push into the new array
+	// 		copyContacts.push(getRandomContact);
+	// 	}
+	// 	// update state
+	// 	this.setState({ contacts: copyContacts });
+	// };
+
+	// Iteration 2: Add New Random Contacts
 	addRandomContact = () => {
-		// copy and expand firstContacts array into new copyContacts array
-		const copyContacts = [...this.state.firstContacts];
-		// get random contact
-		const getRandomContact =
-			contacts[Math.floor(Math.random() * contacts.length)];
-		// check if random contact isn't already in array
-		if (!copyContacts.includes(getRandomContact)) {
-			// if not, push into the new array
-			copyContacts.push(getRandomContact);
+		const unusedContacts = contacts.filter(
+			contact => !this.state.contacts.includes(contact)
+		);
+		const contact =
+			unusedContacts[Math.floor(Math.random() * unusedContacts.length)];
+		if (contact) {
+			this.setState({
+				contacts: [...this.state.contacts, contact],
+			});
 		}
-		// update state
-		this.setState({ firstContacts: copyContacts });
 	};
 
 	// Iteration 3: Sort Contacts By Name And Popularity
+	// sortByName = () => {
+	// 	const copyContacts = [...this.state.contacts];
+	// 	// sort contacts in alphabetical order
+	// 	copyContacts.sort((a, b) => (a.name < b.name ? -1 : 1));
+	// 	// update state
+	// 	this.setState({ contacts: copyContacts });
+	// };
+
+	// Iteration 3: Sort Contacts By Name And Popularity
 	sortByName = () => {
-		const copyContacts = [...this.state.firstContacts];
+		const sortedContacts = [...this.state.contacts];
 		// sort contacts in alphabetical order
-		copyContacts.sort((a, b) => (a.name < b.name ? -1 : 1));
+		sortedContacts.sort((first, second) => (first.name < second.name ? -1 : 1));
 		// update state
-		this.setState({ firstContacts: copyContacts });
+		this.setState({ contacts: sortedContacts });
 	};
 
 	sortByPopularity = () => {
-		const copyContacts = [...this.state.firstContacts];
+		const sortedContacts = [...this.state.contacts];
 		// sort contacts in alphabetical order
-		copyContacts.sort((a, b) => b.popularity - a.popularity);
+		sortedContacts.sort(
+			(first, second) => second.popularity - first.popularity
+		);
 		// update state
-		this.setState({ firstContacts: copyContacts });
+		this.setState({ contacts: sortedContacts });
 	};
+
+	// // Iteration 4: Remove Contacts
+	// deleteContact = id => {
+	// 	const contacts = [...this.state.contacts];
+	// 	// delete contact from table
+	// 	const filteredContacts = contacts.filter(contact => contact.id !== id);
+	// 	// update state
+	// 	this.setState({ contacts: filteredContacts });
+	// };
 
 	// Iteration 4: Remove Contacts
 	deleteContact = id => {
-		const copyContacts = [...this.state.firstContacts];
-		// delete contact from table
-		const filteredContacts = copyContacts.filter(contact => contact.id !== id);
-		// update state
-		this.setState({ firstContacts: filteredContacts });
+		const maintainedContacts = this.state.contacts.filter(
+			contact => contact.id !== id
+		);
+		this.setState({ contacts: maintainedContacts });
 	};
 
 	render() {
@@ -81,7 +114,7 @@ class App extends Component {
 							</tr>
 
 							{/* Iteration 1 */}
-							{this.state.firstContacts.map(contact => {
+							{this.state.contacts.map(contact => {
 								const { name, pictureUrl, popularity, id } = contact;
 
 								return (
